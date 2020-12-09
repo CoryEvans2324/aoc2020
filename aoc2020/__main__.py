@@ -17,6 +17,7 @@ def main():
     parser.add_argument('-d', '--day', type=int, required=True)
     parser.add_argument('-t', '--timeit', type=int)
     parser.add_argument('-v', '--verbose', action='store_true', default=False)
+    parser.add_argument('-e', '--example-input', action='store_true', default=False, dest='example_input')
 
     args = parser.parse_args()
 
@@ -37,7 +38,7 @@ def main():
         for _ in tqdm.trange(args.timeit):
             time_start = timeit.default_timer()
 
-            result = run_day(args.day)
+            result = run_day(args.day, args.example_input)
 
             time_end = timeit.default_timer()
             times.append(time_end - time_start)
@@ -56,17 +57,20 @@ def main():
         )
 
     else:
-        result = run_day(args.day)
+        result = run_day(args.day, args.example_input)
 
     day_str = f'day{args.day:02}'
     print(f'{day_str} Part A: {result[0]}')
     print(f'{day_str} Part B: {result[1]}')
 
-def run_day(day: int):
+def run_day(day: int, use_example_input: bool):
     day_str = f'day{day:02}'
 
     import_path = f'aoc2020.solutions.{day_str}'
-    data_path = f'{day_str}/input.txt'
+    if use_example_input:
+        data_path = f'{day_str}/example.txt'
+    else:
+        data_path = f'{day_str}/input.txt'
 
     logger.debug('Import Path: %s', import_path)
     logger.debug('Data Path:   %s', data_path)
